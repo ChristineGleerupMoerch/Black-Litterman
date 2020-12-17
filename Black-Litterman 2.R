@@ -46,110 +46,6 @@ exReturns.df = as.data.frame(exReturns.mat)
 
 ################Construction of Pf3, Pf4, Pf5 ##################
 
-#Views using EGARCH: 
-library(rugarch)
-library(tidyverse)
-
-garch_spec = ugarchspec(variance.model=list(model="eGARCH", garchOrder=c(1,1), external.regressors =  cbind( as.matrix(return2$premium), as.matrix(return2$spread), as.matrix(return2$term),  as.matrix(return2$oli_price) )),
-                        mean.model=list(armaOrder=c(0,0), archm = TRUE,
-                                        include.mean = TRUE, external.regressors = cbind( as.matrix(return2$premium), as.matrix(return2$spread))))
-
-
-Danske.Aktier.bktest = ugarchroll(garch_spec, data = exReturns.df$Danske.Aktier, n.ahead = 1, 
-                                  refit.every = 1, refit.window = "moving", n.start=120)
-
-Globale.Aktier.bktest = ugarchroll(garch_spec, data = exReturns.df$Globale.Aktier, n.ahead = 1, 
-                                   refit.every = 1, refit.window = "moving", n.start=120)
-
-StabileAktier.bktest = ugarchroll(garch_spec, data = exReturns.df$StabileAktier, n.ahead = 1, 
-                                  refit.every = 1, refit.window = "moving", n.start=120)
-
-Emerging.market.bktest = ugarchroll(garch_spec, data = exReturns.df$Emerging.market, n.ahead = 1, 
-                                    refit.every = 1, refit.window = "moving", n.start=120)
-
-Indeksobligationer.bktest = ugarchroll(garch_spec, data = exReturns.df$Indeksobligationer, n.ahead = 1, 
-                                       refit.every = 3, refit.window = "moving", n.start=120)
-
-Statsobligationer.bktest = ugarchroll(garch_spec, data = exReturns.df$Statsobligationer, n.ahead = 1, 
-                                      refit.every = 1, refit.window = "moving", n.start=120)
-
-Realkredit.bktest = ugarchroll(garch_spec, data = exReturns.df$Realkredit, n.ahead = 1, 
-                               refit.every = 1, refit.window = "moving", n.start=120)
-
-IGObligationer.bktest = ugarchroll(garch_spec, data = exReturns.df$IGObligationer, n.ahead = 1, 
-                                   refit.every = 1, refit.window = "moving", n.start=120)
-
-HYObligationer.bktest = ugarchroll(garch_spec, data = exReturns.df$HYObligationer, n.ahead = 1, 
-                                   refit.every = 3, refit.window = "moving", n.start=120)
-
-EMDHARD.bktest = ugarchroll(garch_spec, data = exReturns.df$EMDHARD, n.ahead = 1, 
-                            refit.every = 1, refit.window = "moving", n.start=120)
-
-EMDLocal.bktest = ugarchroll(garch_spec, data = exReturns.df$EMDLocal, n.ahead = 1, 
-                             refit.every = 2, refit.window = "moving", n.start=120)
-
-PE.bktest = ugarchroll(garch_spec, data = exReturns.df$PE, n.ahead = 1, 
-                       refit.every = 1, refit.window = "moving", n.start=120)
-
-Infrastructure.bktest = ugarchroll(garch_spec, data = exReturns.df$Infrastructure, n.ahead = 1, 
-                                   refit.every = 1, refit.window = "moving", n.start=120)
-
-Skov.bktest = ugarchroll(garch_spec, data = exReturns.df$Skov, n.ahead = 1, 
-                         refit.every = 1, refit.window = "moving", n.start=120)
-
-RealEstate.bktest = ugarchroll(garch_spec, data = exReturns.df$RealEstate, n.ahead = 1, 
-                               refit.every = 1, refit.window = "moving", n.start=120)
-
-
-forecastMU1 <- as.data.frame(Danske.Aktier.bktest@forecast[["density"]][["Mu"]])
-forecastMU2 <- as.data.frame(Globale.Aktier.bktest@forecast[["density"]][["Mu"]])
-forecastMU3 <- as.data.frame(StabileAktier.bktest@forecast[["density"]][["Mu"]])
-forecastMU4 <- as.data.frame(Emerging.market.bktest@forecast[["density"]][["Mu"]])
-forecastMU5 <- as.data.frame(Indeksobligationer.bktest@forecast[["density"]][["Mu"]])
-forecastMU6 <- as.data.frame(Statsobligationer.bktest@forecast[["density"]][["Mu"]])
-forecastMU7 <- as.data.frame(Realkredit.bktest@forecast[["density"]][["Mu"]])
-forecastMU8 <- as.data.frame(IGObligationer.bktest@forecast[["density"]][["Mu"]])
-forecastMU9 <- as.data.frame(HYObligationer.bktest@forecast[["density"]][["Mu"]])
-forecastMU10 <- as.data.frame(EMDHARD.bktest@forecast[["density"]][["Mu"]])
-forecastMU11 <- as.data.frame(EMDLocal.bktest@forecast[["density"]][["Mu"]])
-forecastMU12 <- as.data.frame(PE.bktest@forecast[["density"]][["Mu"]])
-forecastMU13 <- as.data.frame(Infrastructure.bktest@forecast[["density"]][["Mu"]])
-forecastMU14 <- as.data.frame(Skov.bktest@forecast[["density"]][["Mu"]])
-forecastMU15 <- as.data.frame(RealEstate.bktest@forecast[["density"]][["Mu"]])
-
-forecastSigma1 <- as.data.frame(Danske.Aktier.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma2 <- as.data.frame(Globale.Aktier.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma3 <- as.data.frame(StabileAktier.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma4 <- as.data.frame(Emerging.market.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma5 <- as.data.frame(Indeksobligationer.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma6 <- as.data.frame(Statsobligationer.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma7 <- as.data.frame(Realkredit.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma8 <- as.data.frame(IGObligationer.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma9 <- as.data.frame(HYObligationer.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma10 <- as.data.frame(EMDHARD.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma11 <- as.data.frame(EMDLocal.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma12 <- as.data.frame(PE.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma13 <- as.data.frame(Infrastructure.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma14 <- as.data.frame(Skov.bktest@forecast[["density"]][["Sigma"]])
-forecastSigma15 <- as.data.frame(RealEstate.bktest@forecast[["density"]][["Sigma"]])
-
-forecastsigma <- cbind(forecastSigma1, forecastSigma2, forecastSigma3, forecastSigma4, forecastSigma5, forecastSigma6, forecastSigma7, forecastSigma8, forecastSigma9, forecastSigma10,
-                       forecastSigma11, forecastSigma12, forecastSigma13, forecastSigma14, forecastSigma15)
-
-forecastsigma<- as.data.frame(forecastsigma)
-colnames(forecastsigma) <- c("Danske.Aktier", "Globale.Aktier", "StabileAktier", "Emerging.market", "Indeksobligationer", 
-                             'Statsobligationer', 'Realkredit', 'IGObligationer', 'HYObligationer', 
-                             'EMDHARD', 'EMDLocal', 'PE', 'Infrastructure', 'Skov', 'RealEstate')
-forecastsigma
-
-
-forecast<- cbind(forecastMU1,forecastMU2, forecastMU3, forecastMU4, forecastMU5, forecastMU6, forecastMU7, forecastMU8, forecastMU9, forecastMU10, forecastMU11, forecastMU12, forecastMU13, forecastMU14, forecastMU15)
-forcast<- as.data.frame(forecast)
-colnames(forcast) <- c("Danske.Aktier", "Globale.Aktier", "StabileAktier", "Emerging.market", "Indeksobligationer", 
-                       'Statsobligationer', 'Realkredit', 'IGObligationer', 'HYObligationer', 
-                       'EMDHARD', 'EMDLocal', 'PE', 'Infrastructure', 'Skov', 'RealEstate')
-
-
 #Market weights:
 #Pf3: 
 w_lp <- c(0.059, 0.193, 0.15, 0.105, 0.01, 0.065, 0.233, 0.05, 0.03, 0.04, 0.075, 0.025, 0.03, 0.025, 0.055)
@@ -179,6 +75,7 @@ PriorCov <- function(periode){
 Pi.fun = function(cov, weights.vector, lambda ){
   return(lambda* cov %*% (weights.vector))
 }
+
 
 #Views expected rates of return vector Q:
 Q_foecast = function(periode){
@@ -274,6 +171,19 @@ opt_lp <- opt_weight(w_lp, Tau = 0.01, lambda = 2.5) #Pf3
 opt_mkt <- opt_weight(w_mkt, Tau = 0.01, lambda = 2.5) #Pf4
 opt_eq <- opt_weight(w_eq, Tau = 0.01, lambda = 2.5) #Pf5
 
+#Realized return Black-Litterman pf:
+realised_return_lp <- c()
+realised_return_mkt <- c()
+realised_return_eq <- c()
+
+for (i in 1:32) {
+  
+  tt <- i + 120 # One periode ahead compared to what has created the weights
+  realised_return_lp[i] <- as.matrix(exReturns.df[tt,1:15]) %*% opt_lp[i,]/100
+  realised_return_mkt[i] <- as.matrix(exReturns.df[tt,1:15]) %*% opt_mkt[i,]/100
+  realised_return_eq[i] <- as.matrix(exReturns.df[tt,1:15]) %*% opt_eq[i,]/100
+}
+
 
 ######################## Pf1 ########################
 
@@ -282,6 +192,7 @@ colnames(w_equal2) <- colnames(opt_lp)
 
 w_equal <- c(rep(1/15,15))
 
+#Realized return Pf1
 realised_return_equal <- c()
 for (i in 1:32) {
   
@@ -351,8 +262,90 @@ weight_holdning_MV <- function(lambda){
 
 w_mv_shrinkage <- weight_holdning_MV(lambda = 2.5)
 
+#Calculating the realized return for MV 
+return_MV_shrinkage <- c()
+for (i in 1:32) {
+  
+  tt <- i + 120 # One periode ahead compared to what has created the weights
+  return_MV_shrinkage[i] <- as.matrix(exReturns.df[tt,1:15]) %*% w_mv_shrinkage[i,]
+  
+}
 
-############Performance calculation ##############
+return_MV_shrinkage
+
+################################# Performance measures ############################
+names <- c('BL_LP', 'BL_mkt', 'BL_eq', 'w_eq', 'mv_shrikage')
+number_of_pf <- 5
+all_realized<-cbind(c(realised_return_lp*100), c(realised_return_mkt*100), c(realised_return_eq*100), c(realised_return_equal), c(return_MV_shrinkage))
+colnames(all_realized) <- names
+
+#Final return 
+all_realized2<- as.data.frame(all_realized/100)
+return_cum <- cumprod(1+all_realized2)
+round((return_cum[32,]-1)*100,3)
+
+#Average Return(%)
+Average_return <- matrix(0, nrow = 1, ncol = number_of_pf)
+colnames(Average_return) <- names
+for (i in 1:number_of_pf) {
+  
+  nn <- names[i]
+  
+  Average_return[i] <- mean(all_realized[,nn])
+  
+}
+Average_return
+
+
+#Standard Deviation
+Standard_Deviation <- matrix(0, nrow = 1, ncol = number_of_pf)
+colnames(Standard_Deviation) <- names
+for (i in 1:number_of_pf) {
+  
+  nn <- names[i]
+  
+  Standard_Deviation[i] <- sd(all_realized[,nn])
+  
+}
+round(Standard_Deviation,3)
+
+#Sharpe ratio
+Sharp_ratio <- matrix(0, nrow = 1, ncol = number_of_pf)
+colnames(Sharp_ratio) <- names
+for (i in 1:number_of_pf) {
+  
+  Sharp_ratio[i] <- (Average_return[i] - mean(return2$riskfree[121:152])*100)/Standard_Deviation[i]
+  
+}
+
+round(Sharp_ratio,3)
+
+#Min
+min_return <- matrix(0, nrow = 1, ncol = number_of_pf)
+colnames(min_return) <- names
+for (i in 1:number_of_pf) {
+  
+  nn <- names[i]
+  
+  min_return[i] <- min(all_realized[,nn])
+  
+}
+
+round(min_return,3)
+
+#Max
+max_return <- matrix(0, nrow = 1, ncol = number_of_pf)
+colnames(max_return) <- names
+for (i in 1:number_of_pf) {
+  
+  nn <- names[i]
+  
+  max_return[i] <- max(all_realized[,nn])
+  
+}
+round(max_return,3)
+
+
 
 ######## Turnover calculation
 
@@ -380,20 +373,20 @@ for (i in 1:32) {
   
 }
 
-turnover_mat_BL_LP1 <- matrix(0, nrow = 31, ncol = 15)
+turnover_mat_BL_LP <- matrix(0, nrow = 31, ncol = 15)
 turnover_mat_BL_mkt <- matrix(0, nrow = 31, ncol = 15)
 turnover_mat_BL_eq <- matrix(0, nrow = 31, ncol = 15)
 turnover_mat_w_eq <- matrix(0, nrow = 31, ncol = 15)
 turnover_mat_mv_shrinkage <- matrix(0, nrow = 31, ncol = 15)
 
-to_BL_LP1 <- matrix(0, nrow = 31, ncol = 1)
+to_BL_LP <- matrix(0, nrow = 31, ncol = 1)
 to_BL_mkt <- matrix(0, nrow = 31, ncol = 1)
 to_BL_eq <- matrix(0, nrow = 31, ncol = 1)
 to_w_eq <- matrix(0, nrow = 31, ncol = 1)
 to_mv_shrinkage <- matrix(0, nrow = 31, ncol = 1)
 
 
-colnames(turnover_mat_BL_LP1) <- colnames(return2[,1:15])
+colnames(turnover_mat_BL_LP) <- colnames(return2[,1:15])
 colnames(turnover_mat_BL_mkt) <- colnames(return2[,1:15])
 colnames(turnover_mat_BL_eq) <- colnames(return2[,1:15])
 colnames(turnover_mat_w_eq) <- colnames(return2[,1:15])
@@ -410,7 +403,7 @@ for (t in 1:31) {
     turnover_mat_mv_shrinkage[t,j] <-  abs(w_mv_shrinkage[tt,j] - w_plus_mv_shrikage[t,j]*100) 
   }
   
-  to_BL_LP1[t,] <- sum(turnover_mat_BL_LP1[t,])
+  to_BL_LP1[t,] <- sum(turnover_mat_BL_LP[t,])
   to_BL_mkt[t,] <- sum(turnover_mat_BL_mkt[t,])
   to_BL_eq[t,] <- sum(turnover_mat_BL_eq[t,])
   to_w_eq[t,] <- sum(turnover_mat_w_eq[t,])
@@ -426,7 +419,7 @@ round(mean(to_w_eq),3)
 round(mean(to_mv_shrinkage),3)
 
 
-#####################CEQ (certainty-equivalent)
+#CEQ (certainty-equivalent)
 
 realised_return_BL_LP <- c()
 realised_return_BL_mkt <- c()
@@ -453,12 +446,7 @@ CEQ_BL_eq <- mean(realised_return_BL_eq) - lambda/2 * sd(realised_return_BL_eq)^
 CEQ_w_eq <- mean(realised_return_w_eq) - lambda/2 * sd(realised_return_w_eq)^2
 CEQ_mv_shrinkage <- mean(realised_return_mv_shrinkage) - lambda/2 * sd(realised_return_mv_shrinkage)^2
 
-
-######################Return−loss
-names <- c('BL_LP', 'BL_mkt', 'BL_eq', 'w_eq', 'mv_shrikage')
-number_of_pf <- 5
-all_realized<-cbind(c(realised_return_lp*100), c(realised_return_mkt*100), c(realised_return_eq*100), c(realised_return_equal), c(return_MV_shrinkage))
-
+#Return-loss
 realized_dec <- all_realized/100
 colnames(realized_dec) <- names
 return_loss <- c()
@@ -471,62 +459,106 @@ for (i in 1:5) {
 round(return_loss*100,3)
 
 
-#Average Return
-Average_return <- matrix(0, nrow = 1, ncol = number_of_pf)
-colnames(Average_return) <- names2
-for (i in 1:number_of_pf) {
-  
-  nn <- names[i]
-  
-  Average_return[i] <- mean(all_realized[,nn])
-  
-}
+##########################Views####################
 
-#Standard Deviation
-Standard_Deviation <- matrix(0, nrow = 1, ncol = number_of_pf)
-colnames(Standard_Deviation) <- names
-for (i in 1:number_of_pf) {
-  
-  nn <- names2[i]
-  
-  Standard_Deviation[i] <- sd(all_realized[,nn])
-  
-}
-round(Standard_Deviation,3)
+#Views using EGARCH: 
+library(rugarch)
+library(tidyverse)
 
-#Sharpe ratio
-Sharp_ratio <- matrix(0, nrow = 1, ncol = number_of_pf)
-colnames(Sharp_ratio) <- names
-for (i in 1:number_of_pf) {
-  
-  Sharp_ratio[i] <- (Average_return[i] - mean(return2$riskfree[121:152])*100)/Standard_Deviation[i]
-  
-}
+garch_spec = ugarchspec(variance.model=list(model="eGARCH", garchOrder=c(1,1), external.regressors =  cbind( as.matrix(return2$premium), as.matrix(return2$spread), as.matrix(return2$term),  as.matrix(return2$oli_price) )),
+                        mean.model=list(armaOrder=c(0,0), archm = TRUE,
+                        include.mean = TRUE, external.regressors = cbind( as.matrix(return2$premium), as.matrix(return2$spread))))
 
-round(Sharp_ratio,3)
 
-#Min
-min_return <- matrix(0, nrow = 1, ncol = number_of_pf)
-colnames(min_return) <- names
-for (i in 1:number_of_pf) {
-  
-  nn <- names2[i]
-  
-  min_return[i] <- min(all_realized[,nn])
-  
-}
+Danske.Aktier.bktest = ugarchroll(garch_spec, data = exReturns.df$Danske.Aktier, n.ahead = 1, 
+                                  refit.every = 1, refit.window = "moving", n.start=120)
 
-round(min_return,3)
+Globale.Aktier.bktest = ugarchroll(garch_spec, data = exReturns.df$Globale.Aktier, n.ahead = 1, 
+                                   refit.every = 1, refit.window = "moving", n.start=120)
 
-#Max
-max_return <- matrix(0, nrow = 1, ncol = number_of_pf)
-colnames(max_return) <- names
-for (i in 1:number_of_pf) {
-  
-  nn <- names2[i]
-  
-  max_return[i] <- max(all_realized[,nn])
-  
-}
-round(max_return,3)
+StabileAktier.bktest = ugarchroll(garch_spec, data = exReturns.df$StabileAktier, n.ahead = 1, 
+                                  refit.every = 1, refit.window = "moving", n.start=120)
 
+Emerging.market.bktest = ugarchroll(garch_spec, data = exReturns.df$Emerging.market, n.ahead = 1, 
+                                    refit.every = 1, refit.window = "moving", n.start=120)
+
+Indeksobligationer.bktest = ugarchroll(garch_spec, data = exReturns.df$Indeksobligationer, n.ahead = 1, 
+                                       refit.every = 3, refit.window = "moving", n.start=120)
+
+Statsobligationer.bktest = ugarchroll(garch_spec, data = exReturns.df$Statsobligationer, n.ahead = 1, 
+                                      refit.every = 1, refit.window = "moving", n.start=120)
+
+Realkredit.bktest = ugarchroll(garch_spec, data = exReturns.df$Realkredit, n.ahead = 1, 
+                               refit.every = 1, refit.window = "moving", n.start=120)
+
+IGObligationer.bktest = ugarchroll(garch_spec, data = exReturns.df$IGObligationer, n.ahead = 1, 
+                                   refit.every = 1, refit.window = "moving", n.start=120)
+
+HYObligationer.bktest = ugarchroll(garch_spec, data = exReturns.df$HYObligationer, n.ahead = 1, 
+                                   refit.every = 3, refit.window = "moving", n.start=120)
+
+EMDHARD.bktest = ugarchroll(garch_spec, data = exReturns.df$EMDHARD, n.ahead = 1, 
+                            refit.every = 1, refit.window = "moving", n.start=120)
+
+EMDLocal.bktest = ugarchroll(garch_spec, data = exReturns.df$EMDLocal, n.ahead = 1, 
+                             refit.every = 2, refit.window = "moving", n.start=120)
+
+PE.bktest = ugarchroll(garch_spec, data = exReturns.df$PE, n.ahead = 1, 
+                       refit.every = 1, refit.window = "moving", n.start=120)
+
+Infrastructure.bktest = ugarchroll(garch_spec, data = exReturns.df$Infrastructure, n.ahead = 1, 
+                                   refit.every = 1, refit.window = "moving", n.start=120)
+
+Skov.bktest = ugarchroll(garch_spec, data = exReturns.df$Skov, n.ahead = 1, 
+                         refit.every = 1, refit.window = "moving", n.start=120)
+
+RealEstate.bktest = ugarchroll(garch_spec, data = exReturns.df$RealEstate, n.ahead = 1, 
+                               refit.every = 1, refit.window = "moving", n.start=120)
+
+
+forecastMU1 <- as.data.frame(Danske.Aktier.bktest@forecast[["density"]][["Mu"]])
+forecastMU2 <- as.data.frame(Globale.Aktier.bktest@forecast[["density"]][["Mu"]])
+forecastMU3 <- as.data.frame(StabileAktier.bktest@forecast[["density"]][["Mu"]])
+forecastMU4 <- as.data.frame(Emerging.market.bktest@forecast[["density"]][["Mu"]])
+forecastMU5 <- as.data.frame(Indeksobligationer.bktest@forecast[["density"]][["Mu"]])
+forecastMU6 <- as.data.frame(Statsobligationer.bktest@forecast[["density"]][["Mu"]])
+forecastMU7 <- as.data.frame(Realkredit.bktest@forecast[["density"]][["Mu"]])
+forecastMU8 <- as.data.frame(IGObligationer.bktest@forecast[["density"]][["Mu"]])
+forecastMU9 <- as.data.frame(HYObligationer.bktest@forecast[["density"]][["Mu"]])
+forecastMU10 <- as.data.frame(EMDHARD.bktest@forecast[["density"]][["Mu"]])
+forecastMU11 <- as.data.frame(EMDLocal.bktest@forecast[["density"]][["Mu"]])
+forecastMU12 <- as.data.frame(PE.bktest@forecast[["density"]][["Mu"]])
+forecastMU13 <- as.data.frame(Infrastructure.bktest@forecast[["density"]][["Mu"]])
+forecastMU14 <- as.data.frame(Skov.bktest@forecast[["density"]][["Mu"]])
+forecastMU15 <- as.data.frame(RealEstate.bktest@forecast[["density"]][["Mu"]])
+
+forecastSigma1 <- as.data.frame(Danske.Aktier.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma2 <- as.data.frame(Globale.Aktier.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma3 <- as.data.frame(StabileAktier.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma4 <- as.data.frame(Emerging.market.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma5 <- as.data.frame(Indeksobligationer.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma6 <- as.data.frame(Statsobligationer.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma7 <- as.data.frame(Realkredit.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma8 <- as.data.frame(IGObligationer.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma9 <- as.data.frame(HYObligationer.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma10 <- as.data.frame(EMDHARD.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma11 <- as.data.frame(EMDLocal.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma12 <- as.data.frame(PE.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma13 <- as.data.frame(Infrastructure.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma14 <- as.data.frame(Skov.bktest@forecast[["density"]][["Sigma"]])
+forecastSigma15 <- as.data.frame(RealEstate.bktest@forecast[["density"]][["Sigma"]])
+
+forecastsigma <- cbind(forecastSigma1, forecastSigma2, forecastSigma3, forecastSigma4, forecastSigma5, forecastSigma6, forecastSigma7, forecastSigma8, forecastSigma9, forecastSigma10,
+                       forecastSigma11, forecastSigma12, forecastSigma13, forecastSigma14, forecastSigma15)
+
+forecastsigma<- as.data.frame(forecastsigma)
+colnames(forecastsigma) <- c("Danske.Aktier", "Globale.Aktier", "StabileAktier", "Emerging.market", "Indeksobligationer", 
+                             'Statsobligationer', 'Realkredit', 'IGObligationer', 'HYObligationer', 
+                             'EMDHARD', 'EMDLocal', 'PE', 'Infrastructure', 'Skov', 'RealEstate')
+
+
+forecast<- cbind(forecastMU1,forecastMU2, forecastMU3, forecastMU4, forecastMU5, forecastMU6, forecastMU7, forecastMU8, forecastMU9, forecastMU10, forecastMU11, forecastMU12, forecastMU13, forecastMU14, forecastMU15)
+forcast<- as.data.frame(forecast)
+colnames(forcast) <- c("Danske.Aktier", "Globale.Aktier", "StabileAktier", "Emerging.market", "Indeksobligationer", 
+                       'Statsobligationer', 'Realkredit', 'IGObligationer', 'HYObligationer', 
+                       'EMDHARD', 'EMDLocal', 'PE', 'Infrastructure', 'Skov', 'RealEstate')
